@@ -1,0 +1,54 @@
+---
+title: "HW5 notebook"
+output: html_notebook
+---
+
+Here is the first method for overlaying shape data on a raster.
+
+Use the following packages (install them first), then use them via
+the library() call: tmap, tmaptools, rgdal, sp, OpenStreetMap, osmdata
+
+These calls are useful: readOGR(), tmaptools::read_osm(),
+tm_shape(), tm_raster(), tm_dots()
+
+1. readOGR() your shapefile, store it in a var
+2. read_osm() the bbox of #1 above, store it in a var
+3. do tm_shape() on #2 + tm_raster() +
+tm_shape() on #1 + tm_dots() to specify point color and size
+
+```{r}
+library(rgdal)
+library(tmap)
+library(tmaptools)
+library(sp)
+library(osmdata)
+library(OpenStreetMap)
+locations <- readOGR(dsn="C:/Users/ridhi/OneDrive/Documents/CS-585-DB/Ridhi_Shikha_HW5/mygeodata",layer="hw_five")
+location1 <- read_osm(locations)
+tm_shape(location1)+tm_raster()+tm_shape(locations)+tm_dots(col = "red",size=2,shape = 16)
+
+
+```
+
+And here's the second.
+
+Use these packages: PBSmapping, ggmap
+And these calls: importShapefile(), as.data.frame(), get_map(), ggmap(), 
+geom_point()
+
+1. importShapefile() into a var
+2. convert it (#1 above) to a dataframe, store it in a var
+3. get_map() with a location that's in your collection of (lat,long),
+store it in a var
+4. do ggmap() on #3, + geom_point() on #2
+
+```{r}
+library(PBSmapping)
+library(ggmap)
+loca <- importShapefile("C:/Users/ridhi/OneDrive/Documents/CS-585-DB/Ridhi_Shikha_HW5/mygeodata/hw_five.shp") 
+dataf<- data.frame(loca)
+point<- get_map(location = c(lon=-118.282833,lat=34.021853),zoom=15)
+ggmap(point)+geom_point(data=dataf,aes(X,Y),size=5,color="red")
+```
+
+
